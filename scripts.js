@@ -17,6 +17,28 @@ class Calculator {
     this.clear();
   }
 
+  formatDislpayNumber(number) {
+    const stringNumber = number.toString();
+    const integerDigits = parseFloat(stringNumber.split(".")[0]);
+    const decimalDigits = stringNumber.split(".")[1];
+
+    let integerDisplay;
+
+    if (isNaN(integerDigits)) {
+      integerDisplay = "";
+    } else {
+      integerDisplay = integerDigits.toLocaleString("en", {
+        maximumFractionDigits: 0,
+      });
+    }
+
+    if (decimalDigits != null) {
+      return `${integerDisplay}.${decimalDigits}`;
+    } else {
+      return integerDisplay;
+    }
+  }
+
   delete() {
     this.currentOperand = this.currentOperand.toString().slice(0, -1);
   }
@@ -52,6 +74,7 @@ class Calculator {
   }
 
   chooseOperation(operation) {
+    if (this.currentOperand === "") return;
     if (this.previousOperand !== "") {
       this.calculate();
     }
@@ -73,10 +96,12 @@ class Calculator {
   }
 
   updateDisplay() {
-    this.previousOperandTextElement.innerText = `${this.previousOperand} ${
-      this.operation || ""
-    }`;
-    this.currentOperandTextElement.innerText = this.currentOperand;
+    this.previousOperandTextElement.innerText = `${this.formatDislpayNumber(
+      this.previousOperand
+    )} ${this.operation || ""}`;
+    this.currentOperandTextElement.innerText = this.formatDislpayNumber(
+      this.currentOperand
+    );
   }
 }
 
